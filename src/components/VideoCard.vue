@@ -35,6 +35,8 @@ export default {
             entries.forEach((entry) => {
                 const video = this.$refs.videoEl
 
+                if (!video) return
+
                 if (entry.isIntersecting && entry.intersectionRatio === 1) {
                     video.play().catch(() => {})
                 } else {
@@ -44,6 +46,13 @@ export default {
         }, options)
 
         observer.observe(this.$refs.videoEl)
+
+        this._observer = observer
+    },
+    beforeUnmount() {
+        if (this._observer && this.$refs.videoEl) {
+            this._observer.unobserve(this.$refs.videoEl)
+        }
     },
     computed: {
         formattedPrice() {
