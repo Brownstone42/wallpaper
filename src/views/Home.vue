@@ -21,6 +21,9 @@
 <script>
 import CategoryMenu from '../components/CategoryMenu.vue'
 import VideoCard from '../components/VideoCard.vue'
+//import { db } from '@/firebase'
+
+//console.log('Firestore DB:', db)
 
 export default {
     name: 'Home',
