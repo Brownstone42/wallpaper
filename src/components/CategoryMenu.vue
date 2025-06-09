@@ -18,29 +18,25 @@
 </template>
 
 <script>
-import { collection, getDocs } from 'firebase/firestore'
-import { ref as storageRef, getDownloadURL } from 'firebase/storage'
-import { db, storage } from '@/firebase'
+import { useCategoryStore } from '@/stores/category'
 
 export default {
     name: 'CategoryMenu',
     data() {
         return {
-            categories: []
+            store: useCategoryStore()
         }
     },
-    async created() {
-        const snapshot = await getDocs(collection(db, 'categories'))
-        const raw = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-
-        for (const cat of raw) {
-            const fileRef = storageRef(storage, `category-images/${cat.image}`)
-            cat.imageUrl = await getDownloadURL(fileRef)
+    created() {
+        if (this.store.categories.length === 0) {
+            this.store.loadCategories()
         }
-
-        this.categories = raw.sort((a, b) => a.order - b.order)
-
-        console.log(this.categories)
+    },
+    computed: {
+        categories() {
+            //console.log(this.store.categories)
+            return this.store.categories
+        }
     }
 }
 </script>

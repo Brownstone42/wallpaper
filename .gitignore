@@ -31,3 +31,6 @@ coverage
 
 # Local Netlify folder
 .netlify
+
+src/firebase.js
+public/
