@@ -14,7 +14,7 @@ export const useCategoryStore = defineStore('category', {
 
             for (const cat of raw) {
                 try {
-                    const fileRef = storageRef(storage, `category-images/${cat.image}`)
+                    const fileRef = storageRef(storage, `images/categories/${cat.image}`)
                     cat.imageUrl = await getDownloadURL(fileRef)
                 } catch (e) {
                     console.warn(`Image load failed: ${cat.image}`, e)

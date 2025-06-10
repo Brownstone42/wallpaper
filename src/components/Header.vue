@@ -18,21 +18,47 @@
             <div class="navbar-start">
                 <a class="navbar-item" href="#">Home</a>
                 <a class="navbar-item" href="#">About</a>
+                <router-link v-if="userData?.role === 'admin'" class="navbar-item" to="/admin">
+                    Admin
+                </router-link>
             </div>
 
             <div class="navbar-end">
-                <div class="navbar-item">Login</div>
+                <template v-if="user">
+                    <div class="navbar-item">
+                        {{ userData?.name }} ({{ userData?.credits ?? 0 }})
+                    </div>
+                    <a class="navbar-item" @click="handleLogout">Logout</a>
+                </template>
+                <a v-else class="navbar-item" @click="handleLogin">Login</a>
             </div>
         </div>
     </nav>
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth'
+import { storeToRefs } from 'pinia'
+
 export default {
     name: 'Header',
+    setup() {
+        const authStore = useAuthStore()
+        const { user, userData } = storeToRefs(authStore)
+
+        const handleLogin = () => authStore.loginWithGoogle()
+        const handleLogout = () => authStore.logout()
+
+        return {
+            user,
+            userData,
+            handleLogin,
+            handleLogout,
+        }
+    },
     data() {
         return {
-            isActive: false,
+            isActive: false
         }
     },
     methods: {
