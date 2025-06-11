@@ -1,7 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import ProductDetail from '../views/ProductDetail.vue'
-import Admin from '../views/Admin.vue'
+import Admin from '../views/admin/Admin.vue'
+import AdminUpload from '../views/admin/Upload.vue'
+import AdminEdit from '../views/admin/Edit.vue'
+import AdminOther from '../views/admin/Other.vue'
+
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,8 +22,25 @@ const router = createRouter({
 		},
 		{
 			path: '/admin',
-			name: 'Admin',
-			component: Admin
+			component: Admin,
+			children: [
+				{
+					path: '',
+      				redirect: '/admin/upload'
+				},
+				{
+					path: 'upload',
+      				component: AdminUpload
+				},
+				{
+					path: 'edit',
+      				component: AdminEdit
+				},
+				{
+					path: 'other',
+      				component: AdminOther
+				}
+			]
 		}
   	]
 })

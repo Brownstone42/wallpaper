@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar is-light" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="/">
+            <a class="navbar-item">
                 <strong>Wallpaper</strong>
             </a>
 
@@ -16,7 +16,7 @@
 
         <div class="navbar-menu" :class="{ 'is-active': isActive }">
             <div class="navbar-start">
-                <a class="navbar-item" href="#">Home</a>
+                <a class="navbar-item" href="/">Home</a>
                 <a class="navbar-item" href="#">About</a>
                 <router-link v-if="userData?.role === 'admin'" class="navbar-item" to="/admin">
                     Admin

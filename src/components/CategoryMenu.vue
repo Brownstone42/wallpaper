@@ -4,7 +4,7 @@
             <h2 class="title is-4 has-text-centered">Select a Category</h2>
 
             <div class="columns is-multiline is-centered">
-                <div class="column is-one-quarter" v-for="category in categories" :key="category.id">
+                <div class="column is-one-quarter is-pointer" v-for="category in categories" :key="category.id">
                     <div class="box has-text-centered" @click="$emit('select-category', category)">
                         <p class="title is-5">{{ category.name }}</p>
                         <figure class="image is-4by3">

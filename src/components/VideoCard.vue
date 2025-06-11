@@ -10,7 +10,7 @@
         <!-- 💬 Details Below the Phone -->
         <div class="content mt-4" style="width: 100%">
             <p class="is-size-5 has-text-weight-semibold mb-1">{{ title }}</p>
-            <p class="is-size-6 has-text-grey mb-1">iPhone : {{ compatibility }}</p>
+            <p class="is-size-6 has-text-grey mb-1">iPhone : {{ compatibility?.join(', ') }}</p>
             <p class="is-size-5 has-text-weight-bold has-text-info">฿{{ formattedPrice }}</p>
         </div>
     </div>
@@ -22,7 +22,7 @@ export default {
     props: {
         title: String,
         video: String,
-        compatibility: String,
+        compatibility: Array,
         price: [String, Number]
     },
     mounted() {

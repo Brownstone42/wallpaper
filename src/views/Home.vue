@@ -9,9 +9,19 @@
                 </h3>
 
                 <div class="columns is-multiline is-centered">
-                    <router-link :to="`/product/${item.id}`" class="column is-one-quarter p-0" v-for="(item, index) in selectedCategory.items" :key="index">
-                        <VideoCard :title="item.title" :video="item.video" :compatibility="item.compatibility" :price="item.price" />
-                    </router-link>                    
+                    <router-link
+                        :to="`/product/${item.id}`"
+                        class="column is-one-quarter p-0"
+                        v-for="(item, index) in videos"
+                        :key="index"
+                    >
+                        <VideoCard
+                            :title="item.title"
+                            :video="item.showVideo"
+                            :compatibility="item.compatibility"
+                            :price="item.price"
+                        />
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -21,9 +31,8 @@
 <script>
 import CategoryMenu from '../components/CategoryMenu.vue'
 import VideoCard from '../components/VideoCard.vue'
-//import { db } from '@/firebase'
-
-//console.log('Firestore DB:', db)
+import { useCategoryStore } from '@/stores/category'
+import { useVideoStore } from '@/stores/video'
 
 export default {
     name: 'Home',
@@ -38,86 +47,33 @@ export default {
             })
         }
     },
+    mounted() {
+        this.categoryStore.loadCategories()
+    },
     data() {
         return {
             selectedCategory: null,
-            categories: [
-                {
-                    id: 1,
-                    name: 'Cat',
-                    image: 'https://placedog.net/400/300',
-                    items: [
-                        {
-                            id: 'cat-in-space',
-                            title: 'Cat Case 1',
-                            video: '/videos/test01.mp4',
-                            compatibility: '16, 16pm',
-                            price: 1090
-                        },
-                        {
-                            title: 'Cat Case 2',
-                            video: 'https://www.w3schools.com/html/mov_bbb.mp4'
-                        },
-                        {
-                            title: 'Cat Case 3',
-                            video: 'https://www.w3schools.com/html/mov_bbb.mp4'
-                        },
-                        {
-                            title: 'Cat Case 4',
-                            video: 'https://www.w3schools.com/html/mov_bbb.mp4'
-                        },
-                        {
-                            title: 'Cat Case 5',
-                            video: 'https://www.w3schools.com/html/mov_bbb.mp4'
-                        },
-                        {
-                            title: 'Cat Case 6',
-                            video: 'https://www.w3schools.com/html/mov_bbb.mp4'
-                        },
-                        {
-                            title: 'Cat Case 7',
-                            video: 'https://www.w3schools.com/html/mov_bbb.mp4'
-                        },
-                        {
-                            title: 'Cat Case 8',
-                            video: 'https://www.w3schools.com/html/mov_bbb.mp4'
-                        }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: 'Dog',
-                    image: 'https://placedog.net/400/300',
-                    items: [
-                        {
-                            title: 'Dog Case 1',
-                            video: 'https://www.w3schools.com/html/mov_bbb.mp4'
-                        }
-                    ]
-                },
-                {
-                    id: 3,
-                    name: 'Tech',
-                    image: 'https://placedog.net/400/300',
-                    items: [
-                        {
-                            title: 'Tech Case 1',
-                            video: 'https://www.w3schools.com/html/movie.mp4'
-                        }
-                    ]
-                },
-                {
-                    id: 4,
-                    name: 'Nature',
-                    image: 'https://placedog.net/400/300',
-                    items: []
-                }
-            ]
+        }
+    },
+    computed: {
+        categoryStore() {
+            return useCategoryStore()
+        },
+        videoStore() {
+            return useVideoStore()
+        },
+        categories() {
+            return this.categoryStore.categories
+        },
+        videos() {
+            console.log(this.videoStore.getVideosByCategory(this.selectedCategory?.id))
+            return this.videoStore.getVideosByCategory(this.selectedCategory?.id)
         }
     },
     methods: {
-        selectCategory(category) {
+        async selectCategory(category) {
             this.selectedCategory = category
+            await this.videoStore.fetchVideosByCategory(category.id)
         },
         initIntersectionObserver() {
             const options = {
